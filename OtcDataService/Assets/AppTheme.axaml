@@ -1,0 +1,197 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+  <Styles.Resources>
+    <Color x:Key="PrimaryBlue">#1A6FD4</Color>
+    <Color x:Key="PrimaryBlueDark">#1458A8</Color>
+    <Color x:Key="PrimaryBlueLight">#E8F2FC</Color>
+    <Color x:Key="SurfaceWhite">#FFFFFF</Color>
+    <Color x:Key="PageBackground">#F4F8FD</Color>
+    <Color x:Key="BorderBlue">#C5DCF5</Color>
+    <Color x:Key="TextPrimary">#1E3A5F</Color>
+    <Color x:Key="TextSecondary">#5B7A9D</Color>
+    <Color x:Key="SuccessGreen">#15803D</Color>
+
+    <SolidColorBrush x:Key="PrimaryBlueBrush" Color="{StaticResource PrimaryBlue}" />
+    <SolidColorBrush x:Key="PrimaryBlueDarkBrush" Color="{StaticResource PrimaryBlueDark}" />
+    <SolidColorBrush x:Key="PrimaryBlueLightBrush" Color="{StaticResource PrimaryBlueLight}" />
+    <SolidColorBrush x:Key="SurfaceWhiteBrush" Color="{StaticResource SurfaceWhite}" />
+    <SolidColorBrush x:Key="PageBackgroundBrush" Color="{StaticResource PageBackground}" />
+    <SolidColorBrush x:Key="BorderBlueBrush" Color="{StaticResource BorderBlue}" />
+    <SolidColorBrush x:Key="TextPrimaryBrush" Color="{StaticResource TextPrimary}" />
+    <SolidColorBrush x:Key="TextSecondaryBrush" Color="{StaticResource TextSecondary}" />
+    <SolidColorBrush x:Key="SuccessGreenBrush" Color="{StaticResource SuccessGreen}" />
+
+    <CornerRadius x:Key="CardRadius">8</CornerRadius>
+    <CornerRadius x:Key="ControlRadius">6</CornerRadius>
+  </Styles.Resources>
+
+  <!-- Primary button -->
+  <Style Selector="Button.primary">
+    <Setter Property="Background" Value="{StaticResource PrimaryBlueBrush}" />
+    <Setter Property="Foreground" Value="White" />
+    <Setter Property="BorderThickness" Value="0" />
+    <Setter Property="CornerRadius" Value="{StaticResource ControlRadius}" />
+    <Setter Property="Padding" Value="16,8" />
+    <Setter Property="FontWeight" Value="SemiBold" />
+    <Setter Property="Cursor" Value="Hand" />
+  </Style>
+  <Style Selector="Button.primary:pointerover /template/ ContentPresenter">
+    <Setter Property="Background" Value="{StaticResource PrimaryBlueDarkBrush}" />
+  </Style>
+  <Style Selector="Button.primary:disabled">
+    <Setter Property="Opacity" Value="0.5" />
+  </Style>
+
+  <!-- Secondary / outline button -->
+  <Style Selector="Button.secondary">
+    <Setter Property="Background" Value="{StaticResource SurfaceWhiteBrush}" />
+    <Setter Property="Foreground" Value="{StaticResource PrimaryBlueBrush}" />
+    <Setter Property="BorderBrush" Value="{StaticResource BorderBlueBrush}" />
+    <Setter Property="BorderThickness" Value="1" />
+    <Setter Property="CornerRadius" Value="{StaticResource ControlRadius}" />
+    <Setter Property="Padding" Value="16,8" />
+    <Setter Property="Cursor" Value="Hand" />
+  </Style>
+  <Style Selector="Button.secondary:pointerover">
+    <Setter Property="Background" Value="{StaticResource PrimaryBlueLightBrush}" />
+  </Style>
+
+  <!-- Header nav tab -->
+  <Style Selector="Button.headerNav">
+    <Setter Property="Background" Value="Transparent" />
+    <Setter Property="Foreground" Value="White" />
+    <Setter Property="BorderThickness" Value="0" />
+    <Setter Property="CornerRadius" Value="{StaticResource ControlRadius}" />
+    <Setter Property="Padding" Value="14,7" />
+    <Setter Property="Opacity" Value="0.85" />
+    <Setter Property="Cursor" Value="Hand" />
+  </Style>
+  <Style Selector="Button.headerNav:pointerover">
+    <Setter Property="Background" Value="#33FFFFFF" />
+    <Setter Property="Opacity" Value="1" />
+  </Style>
+  <Style Selector="Button.headerNav.active">
+    <Setter Property="Background" Value="#40FFFFFF" />
+    <Setter Property="Opacity" Value="1" />
+    <Setter Property="FontWeight" Value="SemiBold" />
+  </Style>
+  <Style Selector="Button.headerNav:disabled">
+    <Setter Property="Opacity" Value="0.45" />
+  </Style>
+
+  <!-- Settings sidebar nav -->
+  <Style Selector="Button.sideNav">
+    <Setter Property="Background" Value="Transparent" />
+    <Setter Property="Foreground" Value="{StaticResource TextPrimaryBrush}" />
+    <Setter Property="BorderThickness" Value="0" />
+    <Setter Property="CornerRadius" Value="{StaticResource ControlRadius}" />
+    <Setter Property="Padding" Value="14,11" />
+    <Setter Property="HorizontalAlignment" Value="Stretch" />
+    <Setter Property="HorizontalContentAlignment" Value="Left" />
+    <Setter Property="FontSize" Value="14" />
+    <Setter Property="Cursor" Value="Hand" />
+  </Style>
+  <Style Selector="Button.sideNav:pointerover">
+    <Setter Property="Background" Value="#D6E9FA" />
+  </Style>
+  <Style Selector="Button.sideNav.selected">
+    <Setter Property="Background" Value="{StaticResource PrimaryBlueBrush}" />
+    <Setter Property="Foreground" Value="White" />
+    <Setter Property="FontWeight" Value="SemiBold" />
+  </Style>
+  <Style Selector="Button.sideNav.selected:pointerover">
+    <Setter Property="Background" Value="{StaticResource PrimaryBlueDarkBrush}" />
+  </Style>
+
+  <!-- Text inputs -->
+  <Style Selector="TextBox.appInput">
+    <Setter Property="Background" Value="{StaticResource SurfaceWhiteBrush}" />
+    <Setter Property="BorderBrush" Value="{StaticResource BorderBlueBrush}" />
+    <Setter Property="BorderThickness" Value="1" />
+    <Setter Property="CornerRadius" Value="{StaticResource ControlRadius}" />
+    <Setter Property="Padding" Value="10,8" />
+    <Setter Property="Foreground" Value="{StaticResource TextPrimaryBrush}" />
+  </Style>
+  <Style Selector="TextBox.appInput:focus">
+    <Setter Property="BorderBrush" Value="{StaticResource PrimaryBlueBrush}" />
+    <Setter Property="BorderThickness" Value="1.5" />
+  </Style>
+
+  <!-- Input clear button -->
+  <Style Selector="Button.inputClear">
+    <Setter Property="Background" Value="Transparent" />
+    <Setter Property="Foreground" Value="{StaticResource TextSecondaryBrush}" />
+    <Setter Property="BorderBrush" Value="{StaticResource TextSecondaryBrush}" />
+    <Setter Property="BorderThickness" Value="1" />
+    <Setter Property="Padding" Value="0" />
+    <Setter Property="Width" Value="20" />
+    <Setter Property="Height" Value="20" />
+    <Setter Property="CornerRadius" Value="10" />
+    <Setter Property="HorizontalContentAlignment" Value="Center" />
+    <Setter Property="VerticalContentAlignment" Value="Center" />
+    <Setter Property="Cursor" Value="Hand" />
+  </Style>
+  <Style Selector="Button.inputClear:pointerover">
+    <Setter Property="Foreground" Value="{StaticResource PrimaryBlueBrush}" />
+    <Setter Property="BorderBrush" Value="{StaticResource PrimaryBlueBrush}" />
+    <Setter Property="Background" Value="{StaticResource PrimaryBlueLightBrush}" />
+  </Style>
+
+  <Style Selector="NumericUpDown.appInput">
+    <Setter Property="Background" Value="{StaticResource SurfaceWhiteBrush}" />
+    <Setter Property="BorderBrush" Value="{StaticResource BorderBlueBrush}" />
+    <Setter Property="BorderThickness" Value="1" />
+    <Setter Property="CornerRadius" Value="{StaticResource ControlRadius}" />
+    <Setter Property="Foreground" Value="{StaticResource TextPrimaryBrush}" />
+  </Style>
+
+  <!-- Card container -->
+  <Style Selector="Border.card">
+    <Setter Property="Background" Value="{StaticResource SurfaceWhiteBrush}" />
+    <Setter Property="BorderBrush" Value="{StaticResource BorderBlueBrush}" />
+    <Setter Property="BorderThickness" Value="1" />
+    <Setter Property="CornerRadius" Value="{StaticResource CardRadius}" />
+    <Setter Property="BoxShadow" Value="0 2 8 0 #12000000" />
+  </Style>
+
+  <!-- Form label -->
+  <Style Selector="TextBlock.formLabel">
+    <Setter Property="Foreground" Value="{StaticResource TextSecondaryBrush}" />
+    <Setter Property="FontSize" Value="13" />
+    <Setter Property="VerticalAlignment" Value="Center" />
+  </Style>
+
+  <!-- Section title -->
+  <Style Selector="TextBlock.sectionTitle">
+    <Setter Property="Foreground" Value="{StaticResource TextPrimaryBrush}" />
+    <Setter Property="FontSize" Value="17" />
+    <Setter Property="FontWeight" Value="SemiBold" />
+  </Style>
+
+  <!-- Page title -->
+  <Style Selector="TextBlock.pageTitle">
+    <Setter Property="Foreground" Value="{StaticResource TextPrimaryBrush}" />
+    <Setter Property="FontSize" Value="20" />
+    <Setter Property="FontWeight" Value="SemiBold" />
+  </Style>
+
+  <!-- Log list -->
+  <Style Selector="ListBox.logList">
+    <Setter Property="Background" Value="Transparent" />
+    <Setter Property="BorderThickness" Value="0" />
+    <Setter Property="Padding" Value="4" />
+  </Style>
+  <Style Selector="ListBox.logList ListBoxItem">
+    <Setter Property="Padding" Value="8,4" />
+    <Setter Property="CornerRadius" Value="4" />
+    <Setter Property="Margin" Value="0,1" />
+  </Style>
+  <Style Selector="ListBox.logList ListBoxItem:selected">
+    <Setter Property="Background" Value="{StaticResource PrimaryBlueLightBrush}" />
+  </Style>
+  <Style Selector="ListBox.logList ListBoxItem:pointerover">
+    <Setter Property="Background" Value="#F0F7FF" />
+  </Style>
+
+</Styles>

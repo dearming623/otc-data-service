@@ -1,0 +1,76 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:OtcDataService.ViewModels"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d"
+        d:DesignWidth="960"
+        d:DesignHeight="640"
+        x:Class="OtcDataService.Views.MainWindow"
+        x:DataType="vm:MainWindowViewModel"
+        Icon="/Assets/ic_app_moleq.ico"
+        Title="{Binding WindowTitle}"
+        Width="960"
+        Height="640"
+        MinWidth="800"
+        MinHeight="520"
+        Background="{StaticResource PageBackgroundBrush}">
+
+  <Design.DataContext>
+    <vm:MainWindowViewModel />
+  </Design.DataContext>
+
+  <DockPanel>
+    <!-- Top header bar -->
+    <Border DockPanel.Dock="Top"
+            Background="{StaticResource PrimaryBlueBrush}"
+            Padding="20,14">
+      <Grid ColumnDefinitions="Auto,*,Auto">
+        <StackPanel Orientation="Horizontal" Spacing="10" VerticalAlignment="Center">
+          <Border Width="48" Height="48"
+                  CornerRadius="16"
+                  ClipToBounds="True">
+            <Image Source="/Assets/ic_avater.png"
+                   Stretch="Uniform"
+                   HorizontalAlignment="Center"
+                   VerticalAlignment="Center" />
+          </Border>
+          <StackPanel Orientation="Horizontal" Spacing="6" VerticalAlignment="Center">
+            <TextBlock Text="{Binding AppName}"
+                       FontSize="17"
+                       FontWeight="SemiBold"
+                       Foreground="White"
+                       VerticalAlignment="Center" />
+            <TextBlock Text="{Binding VersionLabel}"
+                       FontSize="12"
+                       Foreground="#CCFFFFFF"
+                       VerticalAlignment="Center" />
+          </StackPanel>
+        </StackPanel>
+
+        <StackPanel Grid.Column="1"
+                    Orientation="Horizontal"
+                    HorizontalAlignment="Center"
+                    Spacing="4">
+          <Button Content="Home"
+                  Classes="headerNav"
+                  Classes.active="{Binding IsOnHomePage}"
+                  Command="{Binding NavigateHomeCommand}" />
+          <Button Content="Settings"
+                  Classes="headerNav"
+                  Classes.active="{Binding IsOnSettingsPage}"
+                  Command="{Binding NavigateSettingsCommand}" />
+        </StackPanel>
+
+        <TextBlock Grid.Column="2"
+                   VerticalAlignment="Center"
+                   Foreground="#CCFFFFFF"
+                   FontSize="12"
+                   Text="{Binding CurrentPageLabel}" />
+      </Grid>
+    </Border>
+
+    <ContentControl Content="{Binding CurrentContent}"
+                    Margin="0" />
+  </DockPanel>
+</Window>
