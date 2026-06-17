@@ -49,7 +49,67 @@
                   Classes="secondary"
                   Click="OnBrowseClick" />
         </Grid>
+        <TextBlock Text="Local folder where CSV files are saved before optional FTP upload."
+                   Foreground="{StaticResource TextSecondaryBrush}"
+                   FontSize="12" />
       </StackPanel>
+
+      <Border BorderBrush="{StaticResource BorderBlueBrush}"
+              BorderThickness="1"
+              CornerRadius="8"
+              Padding="14"
+              Margin="0,4,0,0">
+        <StackPanel Spacing="14">
+          <CheckBox Content="Upload CSV to FTP after export"
+                    IsChecked="{Binding FtpUploadEnabled}" />
+
+          <StackPanel Spacing="14" IsEnabled="{Binding FtpUploadEnabled}">
+            <StackPanel Spacing="6">
+              <TextBlock Text="FTP host" Classes="formLabel" />
+              <TextBox Text="{Binding FtpHost}"
+                       Classes="appInput"
+                       Watermark="e.g. ftp.example.com" />
+            </StackPanel>
+
+            <StackPanel Spacing="6">
+              <TextBlock Text="FTP port" Classes="formLabel" />
+              <NumericUpDown Minimum="1"
+                             Maximum="65535"
+                             Value="{Binding FtpPort}"
+                             Classes="appInput"
+                             Width="160"
+                             HorizontalAlignment="Left" />
+            </StackPanel>
+
+            <StackPanel Spacing="6">
+              <TextBlock Text="FTP username" Classes="formLabel" />
+              <TextBox Text="{Binding FtpUserName}" Classes="appInput" />
+            </StackPanel>
+
+            <StackPanel Spacing="6">
+              <TextBlock Text="FTP password" Classes="formLabel" />
+              <TextBox Text="{Binding FtpPassword}" Classes="appInput" PasswordChar="●" />
+            </StackPanel>
+
+            <StackPanel Spacing="6">
+              <TextBlock Text="FTP remote path" Classes="formLabel" />
+              <TextBox Text="{Binding FtpRemotePath}"
+                       Classes="appInput"
+                       Watermark="e.g. /exports" />
+              <TextBlock Text="Remote directory on the FTP server. The directory is created if it does not exist."
+                         Foreground="{StaticResource TextSecondaryBrush}"
+                         FontSize="12" />
+            </StackPanel>
+
+            <Button Content="Test FTP Connection"
+                    Classes="primary"
+                    HorizontalAlignment="Left"
+                    Command="{Binding TestFtpConnectionCommand}" />
+          </StackPanel>
+        </StackPanel>
+      </Border>
+
+      <Border Height="80" />
     </StackPanel>
 
     <TextBlock Text="{Binding StatusMessage}"

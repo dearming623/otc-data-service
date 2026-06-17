@@ -53,15 +53,10 @@
                        Classes="sectionTitle" />
           </Border>
 
-          <ScrollViewer Padding="24,20"
+          <ScrollViewer Padding="24,20,24,32"
                         HorizontalScrollBarVisibility="Disabled"
                         VerticalScrollBarVisibility="Auto">
-            <Panel MinHeight="300">
-              <ContentControl Content="{Binding Database}"
-                              IsVisible="{Binding IsDatabaseSelected}" />
-              <ContentControl Content="{Binding Export}"
-                              IsVisible="{Binding IsExportSelected}" />
-            </Panel>
+            <ContentControl Content="{Binding SelectedSectionContent}" />
           </ScrollViewer>
           </DockPanel>
         </Border>

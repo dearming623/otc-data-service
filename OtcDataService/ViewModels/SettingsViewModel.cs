@@ -18,6 +18,13 @@ public partial class SettingsViewModel : ViewModelBase
     public bool IsDatabaseSelected => SelectedSection == SettingsSection.Database;
     public bool IsExportSelected => SelectedSection == SettingsSection.Export;
 
+    public ViewModelBase SelectedSectionContent => SelectedSection switch
+    {
+        SettingsSection.Database => Database,
+        SettingsSection.Export => Export,
+        _ => Database
+    };
+
     public string SelectedSectionTitle => SelectedSection switch
     {
         SettingsSection.Database => "Database Settings",
@@ -29,6 +36,7 @@ public partial class SettingsViewModel : ViewModelBase
     {
         OnPropertyChanged(nameof(IsDatabaseSelected));
         OnPropertyChanged(nameof(IsExportSelected));
+        OnPropertyChanged(nameof(SelectedSectionContent));
         OnPropertyChanged(nameof(SelectedSectionTitle));
     }
 

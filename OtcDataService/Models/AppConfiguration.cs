@@ -11,6 +11,13 @@ public sealed class AppConfiguration
     public string OutputFolder { get; set; } =
         Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "OtcDataService", "Exports");
 
+    public bool FtpUploadEnabled { get; set; }
+    public string FtpHost { get; set; } = string.Empty;
+    public int FtpPort { get; set; } = 21;
+    public string FtpUserName { get; set; } = string.Empty;
+    public string FtpPassword { get; set; } = string.Empty;
+    public string FtpRemotePath { get; set; } = "/";
+
     public DateTime? LastExportUtc { get; set; }
     public bool IsEnabled { get; set; }
 

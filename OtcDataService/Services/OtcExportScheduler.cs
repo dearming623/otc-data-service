@@ -73,6 +73,11 @@ public sealed class OtcExportScheduler : IDisposable
                 return false;
             }
 
+            if (!FtpUploadService.ValidateSettings(config, out errorMessage))
+            {
+                return false;
+            }
+
             if (!_odbcConnectionService.TestConnection(config, out errorMessage))
             {
                 return false;

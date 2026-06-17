@@ -11,6 +11,7 @@ public sealed class ExportDataService
     private readonly IProdtableRepository _prodtableRepository;
     private readonly IMktDepRepository _mktDepRepository;
     private readonly IItemCategoryRepository _itemCategoryRepository;
+    private readonly FtpUploadService _ftpUploadService;
     private readonly LogService _logService;
 
     public ExportDataService(
@@ -19,6 +20,7 @@ public sealed class ExportDataService
         IProdtableRepository prodtableRepository,
         IMktDepRepository mktDepRepository,
         IItemCategoryRepository itemCategoryRepository,
+        FtpUploadService ftpUploadService,
         LogService logService)
     {
         _configurationService = configurationService;
@@ -26,6 +28,7 @@ public sealed class ExportDataService
         _prodtableRepository = prodtableRepository;
         _mktDepRepository = mktDepRepository;
         _itemCategoryRepository = itemCategoryRepository;
+        _ftpUploadService = ftpUploadService;
         _logService = logService;
     }
 
@@ -81,6 +84,13 @@ public sealed class ExportDataService
                 CatalogExportRow.Headers,
                 rowsByProductCode.Values.Select(row => row.ToValues()),
                 cancellationToken);
+
+            if (config.FtpUploadEnabled)
+            {
+                _logService.Info("Uploading catalog export to FTP...");
+                await _ftpUploadService.UploadFileAsync(config, filePath, cancellationToken);
+                _logService.Info($"Catalog export uploaded to FTP: {fileName}.");
+            }
 
             _configurationService.Update(c => c.LastExportUtc = DateTime.UtcNow);
             _logService.Info($"Catalog export completed: {rowsByProductCode.Count} row(s) written to {filePath}.");

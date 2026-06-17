@@ -1,6 +1,7 @@
 using Avalonia.Platform.Storage;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using OtcDataService.Models;
 using OtcDataService.Services;
 
 namespace OtcDataService.ViewModels;
@@ -17,6 +18,24 @@ public partial class ExportSettingsViewModel : ViewModelBase
     private string _outputFolder = string.Empty;
 
     [ObservableProperty]
+    private bool _ftpUploadEnabled;
+
+    [ObservableProperty]
+    private string _ftpHost = string.Empty;
+
+    [ObservableProperty]
+    private int _ftpPort = 21;
+
+    [ObservableProperty]
+    private string _ftpUserName = string.Empty;
+
+    [ObservableProperty]
+    private string _ftpPassword = string.Empty;
+
+    [ObservableProperty]
+    private string _ftpRemotePath = "/";
+
+    [ObservableProperty]
     private string? _statusMessage;
 
     public ExportSettingsViewModel()
@@ -30,6 +49,12 @@ public partial class ExportSettingsViewModel : ViewModelBase
         SalesLookbackDays = config.SalesLookbackDays;
         DocumentIntervalDays = config.DocumentIntervalDays;
         OutputFolder = config.OutputFolder;
+        FtpUploadEnabled = config.FtpUploadEnabled;
+        FtpHost = config.FtpHost;
+        FtpPort = config.FtpPort;
+        FtpUserName = config.FtpUserName;
+        FtpPassword = config.FtpPassword;
+        FtpRemotePath = config.FtpRemotePath;
         StatusMessage = null;
     }
 
@@ -50,6 +75,35 @@ public partial class ExportSettingsViewModel : ViewModelBase
         if (folders.Count > 0)
         {
             OutputFolder = folders[0].Path.LocalPath;
+        }
+    }
+
+    [RelayCommand]
+    private async Task TestFtpConnectionAsync()
+    {
+        var config = BuildDraftConfiguration();
+        if (!FtpUploadService.ValidateSettings(config, out var validationError))
+        {
+            StatusMessage = validationError;
+            return;
+        }
+
+        if (!config.FtpUploadEnabled)
+        {
+            StatusMessage = "Enable FTP upload to test the connection.";
+            return;
+        }
+
+        try
+        {
+            await AppServices.FtpUpload.TestConnectionAsync(config);
+            StatusMessage = "FTP connection successful.";
+            AppServices.Log.Info("FTP connection test successful.");
+        }
+        catch (Exception ex)
+        {
+            StatusMessage = $"FTP connection failed: {ex.Message}";
+            AppServices.Log.Error($"FTP connection test failed: {ex.Message}");
         }
     }
 
@@ -76,11 +130,24 @@ public partial class ExportSettingsViewModel : ViewModelBase
             return false;
         }
 
+        var draft = BuildDraftConfiguration();
+        if (!FtpUploadService.ValidateSettings(draft, out errorMessage))
+        {
+            StatusMessage = errorMessage;
+            return false;
+        }
+
         AppServices.Configuration.Update(config =>
         {
             config.SalesLookbackDays = SalesLookbackDays;
             config.DocumentIntervalDays = DocumentIntervalDays;
             config.OutputFolder = OutputFolder.Trim();
+            config.FtpUploadEnabled = FtpUploadEnabled;
+            config.FtpHost = FtpHost.Trim();
+            config.FtpPort = FtpPort;
+            config.FtpUserName = FtpUserName.Trim();
+            config.FtpPassword = FtpPassword;
+            config.FtpRemotePath = string.IsNullOrWhiteSpace(FtpRemotePath) ? "/" : FtpRemotePath.Trim();
         });
 
         StatusMessage = "Export settings saved.";
@@ -88,4 +155,18 @@ public partial class ExportSettingsViewModel : ViewModelBase
         AppServices.Log.Info("Export settings saved.");
         return true;
     }
+
+    private AppConfiguration BuildDraftConfiguration() =>
+        new()
+        {
+            SalesLookbackDays = SalesLookbackDays,
+            DocumentIntervalDays = DocumentIntervalDays,
+            OutputFolder = OutputFolder.Trim(),
+            FtpUploadEnabled = FtpUploadEnabled,
+            FtpHost = FtpHost.Trim(),
+            FtpPort = FtpPort,
+            FtpUserName = FtpUserName.Trim(),
+            FtpPassword = FtpPassword,
+            FtpRemotePath = string.IsNullOrWhiteSpace(FtpRemotePath) ? "/" : FtpRemotePath.Trim()
+        };
 }

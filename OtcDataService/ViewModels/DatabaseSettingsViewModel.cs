@@ -80,6 +80,12 @@ public partial class DatabaseSettingsViewModel : ViewModelBase
             SalesLookbackDays = config.SalesLookbackDays,
             DocumentIntervalDays = config.DocumentIntervalDays,
             OutputFolder = config.OutputFolder,
+            FtpUploadEnabled = config.FtpUploadEnabled,
+            FtpHost = config.FtpHost,
+            FtpPort = config.FtpPort,
+            FtpUserName = config.FtpUserName,
+            FtpPassword = config.FtpPassword,
+            FtpRemotePath = config.FtpRemotePath,
             LastExportUtc = config.LastExportUtc,
             IsEnabled = config.IsEnabled
         };
