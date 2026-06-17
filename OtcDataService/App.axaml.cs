@@ -3,6 +3,7 @@ using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
 using Avalonia.Platform;
+using Avalonia.Threading;
 using OtcDataService.Services;
 using OtcDataService.ViewModels;
 using OtcDataService.Views;
@@ -22,6 +23,11 @@ public partial class App : Application
     {
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
         {
+            SingleInstanceGuard.RegisterActivateCallback(() =>
+            {
+                Dispatcher.UIThread.Post(TrayViewModel.ShowMainWindow);
+            });
+
             desktop.ShutdownMode = ShutdownMode.OnExplicitShutdown;
 
             var mainWindow = new MainWindow
@@ -73,6 +79,7 @@ public partial class App : Application
 
             AppServices.Log.Info("OTC Data Service started.");
             AppServices.Log.Info($"Process architecture: {(Environment.Is64BitProcess ? "64-bit" : "32-bit")} (ODBC requires matching DSN bitness).");
+            AppServices.Log.Info("Single-instance guard active (local mutex and LAN TCP lock).");
             TrayViewModel.ShowMainWindow();
         }
 

@@ -83,6 +83,7 @@ public partial class TrayApplicationViewModel : ViewModelBase
             mainWindow.Close();
         }
 
+        SingleInstanceGuard.Release();
         Environment.Exit(0);
     }
 

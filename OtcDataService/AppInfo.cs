@@ -5,6 +5,8 @@ namespace OtcDataService;
 public static class AppInfo
 {
     public const string Name = "OTC Data Service";
+    public const string SingleInstanceMutexName = "Global\\OtcDataService.SingleInstance";
+    public const string SingleInstancePipeName = "OtcDataService.SingleInstance";
 
     public static string Version { get; } = ResolveVersion();
 
