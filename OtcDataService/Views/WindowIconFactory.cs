@@ -9,12 +9,12 @@ namespace OtcDataService.Views;
 
 internal static class WindowIconFactory
 {
-    private const string ExitIconGeometry =
-        "M9,3 L9,8 L4,8 L4,18 L14,18 L14,8 L11,8 L11,3 Z M11,3 L14,6 L11,6 Z M16,10 L20,13 L16,16 L16,14.5 L12,14.5 L12,11.5 L16,11.5 Z";
-
-    public static WindowIcon Create()
+    public static WindowIcon Create(string key)
     {
-        const int size = 32;
+        var definition = WindowIconCatalog.Get(key);
+        var size = definition.Size;
+        var margin = definition.Margin;
+        var innerSize = size - margin * 2;
 
         var visual = new Canvas
         {
@@ -24,12 +24,12 @@ internal static class WindowIconFactory
             {
                 new Avalonia.Controls.Shapes.Path
                 {
-                    Data = StreamGeometry.Parse(ExitIconGeometry),
-                    Fill = new SolidColorBrush(Color.FromRgb(0x1A, 0x6F, 0xD4)),
-                    Width = size - 4,
-                    Height = size - 4,
+                    Data = definition.ParsedGeometry,
+                    Fill = new SolidColorBrush(definition.ParsedFill),
+                    Width = innerSize,
+                    Height = innerSize,
                     Stretch = Stretch.Uniform,
-                    Margin = new Thickness(2)
+                    Margin = new Thickness(margin)
                 }
             }
         };

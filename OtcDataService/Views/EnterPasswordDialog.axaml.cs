@@ -20,7 +20,7 @@ public partial class EnterPasswordDialog : Window
     public EnterPasswordDialog()
     {
         InitializeComponent();
-        Icon = WindowIconFactory.Create();
+        Icon = WindowIconFactory.Create("password");
         PasswordBox.KeyDown += OnPasswordBoxKeyDown;
     }
 
