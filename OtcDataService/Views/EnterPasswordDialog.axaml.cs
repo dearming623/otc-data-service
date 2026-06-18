@@ -76,9 +76,10 @@ public partial class EnterPasswordDialog : Window
 
     private static Window? GetOwnerWindow()
     {
-        if (Application.Current?.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
+        if (Application.Current?.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop
+            && desktop.MainWindow is { IsVisible: true } mainWindow)
         {
-            return desktop.MainWindow;
+            return mainWindow;
         }
 
         return null;
@@ -93,7 +94,15 @@ public partial class EnterPasswordDialog : Window
     {
         if (owner is null)
         {
-            _activeTcs?.TrySetResult(false);
+            try
+            {
+                dialog.Show();
+            }
+            catch
+            {
+                _activeTcs?.TrySetResult(false);
+            }
+
             return;
         }
 
