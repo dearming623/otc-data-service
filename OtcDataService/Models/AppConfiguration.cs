@@ -20,6 +20,7 @@ public sealed class AppConfiguration
 
     public DateTime? LastExportUtc { get; set; }
     public bool IsEnabled { get; set; }
+    public bool HasCompletedSetup { get; set; }
 
     public string BuildConnectionString() =>
         $"Dsn={OdbcDsn};Uid={OdbcUserId};Pwd={OdbcPassword}";

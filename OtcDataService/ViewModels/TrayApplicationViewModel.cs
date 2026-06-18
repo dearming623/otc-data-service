@@ -3,6 +3,7 @@ using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using OtcDataService.Native;
 using OtcDataService.Services;
 using OtcDataService.Views;
 
@@ -10,6 +11,9 @@ namespace OtcDataService.ViewModels;
 
 public partial class TrayApplicationViewModel : ViewModelBase
 {
+    private const string SetupRequiredMessage =
+        "Please configure the database and export settings, then click Save to enable the service.";
+
     private NativeMenuItem? _enableMenuItem;
     private NativeMenuItem? _settingMenuItem;
     private TrayIcon? _trayIcon;
@@ -138,6 +142,26 @@ public partial class TrayApplicationViewModel : ViewModelBase
             e.Cancel = true;
             mainWindow.Hide();
         };
+    }
+
+    public void InitializeOnStartup()
+    {
+        if (!AppServices.Configuration.Current.HasCompletedSetup)
+        {
+            MainWindowViewModel.NavigateSettings();
+            MainWindowViewModel.Settings.StatusMessage = SetupRequiredMessage;
+            Win32MessageBox.ShowInfo(SetupRequiredMessage);
+            return;
+        }
+
+        if (AppServices.ExportScheduler.TryStart(out var error))
+        {
+            return;
+        }
+
+        AppServices.Log.Error(error ?? "Failed to enable export scheduler on startup.");
+        Win32MessageBox.ShowInfo(error ?? "Failed to enable export scheduler on startup.");
+        MainWindowViewModel.NavigateSettings();
     }
 
     private void OnRunningStateChanged(object? sender, bool isRunning)

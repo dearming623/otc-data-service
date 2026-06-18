@@ -81,6 +81,7 @@ public partial class App : Application
             AppServices.Log.Info($"Process architecture: {(Environment.Is64BitProcess ? "64-bit" : "32-bit")} (ODBC requires matching DSN bitness).");
             AppServices.Log.Info("Single-instance guard active (local mutex and LAN TCP lock).");
             TrayViewModel.ShowMainWindow();
+            TrayViewModel.InitializeOnStartup();
         }
 
         base.OnFrameworkInitializationCompleted();

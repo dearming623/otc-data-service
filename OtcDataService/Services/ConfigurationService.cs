@@ -32,12 +32,17 @@ public sealed class ConfigurationService
             if (!File.Exists(_configPath))
             {
                 Current = new AppConfiguration();
-                Save();
                 return;
             }
 
             var json = File.ReadAllText(_configPath);
             Current = JsonSerializer.Deserialize<AppConfiguration>(json, JsonOptions) ?? new AppConfiguration();
+
+            if (!json.Contains("hasCompletedSetup", StringComparison.OrdinalIgnoreCase))
+            {
+                Current.HasCompletedSetup = true;
+                Save();
+            }
         }
         catch
         {

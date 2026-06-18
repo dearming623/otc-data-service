@@ -82,6 +82,8 @@ public partial class SettingsViewModel : ViewModelBase
             return;
         }
 
+        var wasFirstSetup = !AppServices.Configuration.Current.HasCompletedSetup;
+
         if (!Database.SaveToConfiguration(out var databaseError))
         {
             StatusMessage = databaseError;
@@ -93,6 +95,22 @@ public partial class SettingsViewModel : ViewModelBase
         {
             StatusMessage = exportError;
             SelectedSection = SettingsSection.Export;
+            return;
+        }
+
+        AppServices.Configuration.Update(c => c.HasCompletedSetup = true);
+
+        if (wasFirstSetup)
+        {
+            if (AppServices.ExportScheduler.TryStart(out var startError))
+            {
+                StatusMessage = "All settings saved. Service enabled.";
+            }
+            else
+            {
+                StatusMessage = startError ?? "Settings saved but failed to enable service.";
+            }
+
             return;
         }
 
