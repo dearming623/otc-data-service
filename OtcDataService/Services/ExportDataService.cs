@@ -1,6 +1,7 @@
 using OtcDataService.Models;
 using OtcDataService.Models.Entities;
 using OtcDataService.Repositories;
+using System.Security.AccessControl;
 
 namespace OtcDataService.Services;
 
@@ -69,6 +70,13 @@ public sealed class ExportDataService
 
                 foreach (var product in products)
                 {
+                    // Skip inactive products
+                    var active = product.ActiveFl;  
+                    if (active is not null && active.Equals("N", StringComparison.OrdinalIgnoreCase)) 
+                    {
+                        continue;
+                    } 
+
                     var dep = await ResolveDepAsync(product, depCache, cancellationToken);
                     var category = await ResolveCategoryAsync(product, categoryCache, cancellationToken);
                     var row = CatalogRowMapper.Map(product, dep, category);
