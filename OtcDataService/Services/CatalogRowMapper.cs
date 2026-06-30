@@ -22,7 +22,7 @@ public static class CatalogRowMapper
 
     public static string FormatProductCode(Prodtable product)
     {
-        //Kevin要求都做法
+        //Kevin要求的做法
         //// P = PLU fixed,  W = PLU Weight
         //if (IsPLUItem(product))
         //{

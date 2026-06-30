@@ -65,39 +65,52 @@ public sealed class ExportDataService
                 cancellationToken);
 
             _logService.Info($"Found {pCodes.Count} distinct product code(s) in CleanupTrn.");
-            onStatusChanged?.Invoke($"Building catalog... ({pCodes.Count} product codes found)");
 
             var depCache = new Dictionary<int, MktDep?>();
             var categoryCache = new Dictionary<int, ItemCategory?>();
             var rowsByProductCode = new Dictionary<string, CatalogExportRow>(StringComparer.Ordinal);
 
-            foreach (var pCode in pCodes)
+            var totalProductCodes = pCodes.Count;
+            onStatusChanged?.Invoke($"Building catalog... (0/{totalProductCodes} product codes)");
+
+            for (var i = 0; i < totalProductCodes; i++)
             {
                 cancellationToken.ThrowIfCancellationRequested();
 
+                var pCode = pCodes[i];
                 var products = await _prodtableRepository.ListByPCodeAsync(pCode, cancellationToken);
                 if (products.Count == 0)
                 {
                     _logService.Warning($"No prodtable rows for p_code {pCode}.");
-                    continue;
+                }
+                else
+                {
+                    foreach (var product in products)
+                    {
+                        // Skip inactive products
+                        var active = product.ActiveFl;
+                        if (active is not null && active.Equals("N", StringComparison.OrdinalIgnoreCase))
+                        {
+                            continue;
+                        }
+
+                        var dep = await ResolveDepAsync(product, depCache, cancellationToken);
+                        var category = await ResolveCategoryAsync(product, categoryCache, cancellationToken);
+                        var row = CatalogRowMapper.Map(product, dep, category);
+                        rowsByProductCode[row.ProductCode] = row;
+                    }
                 }
 
-                foreach (var product in products)
+                var processed = i + 1;
+                if (ShouldReportStatus(processed, totalProductCodes))
                 {
-                    // Skip inactive products
-                    var active = product.ActiveFl;  
-                    if (active is not null && active.Equals("N", StringComparison.OrdinalIgnoreCase)) 
-                    {
-                        continue;
-                    } 
-
-                    var dep = await ResolveDepAsync(product, depCache, cancellationToken);
-                    var category = await ResolveCategoryAsync(product, categoryCache, cancellationToken);
-                    var row = CatalogRowMapper.Map(product, dep, category);
-                    rowsByProductCode[row.ProductCode] = row;
+                    onStatusChanged?.Invoke(
+                        $"Building catalog... ({processed}/{totalProductCodes} product codes)");
                 }
             }
 
+            onStatusChanged?.Invoke(
+                $"Building catalog complete ({rowsByProductCode.Count} rows from {totalProductCodes} product codes)");
             var fileName = config.BuildCatalogExportFileName(DateTime.Now);
             var filePath = Path.Combine(config.OutputFolder, fileName);
 
@@ -184,5 +197,25 @@ public sealed class ExportDataService
         }
 
         return category;
+    }
+
+    private static bool ShouldReportStatus(int current, int total)
+    {
+        if (current == 1 || current == total)
+        {
+            return true;
+        }
+
+        if (total <= 20)
+        {
+            return true;
+        }
+
+        if (total <= 100)
+        {
+            return current % 5 == 0;
+        }
+
+        return current % Math.Max(1, total / 20) == 0;
     }
 }
